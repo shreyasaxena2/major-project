@@ -21,14 +21,16 @@ let coin,coinImage;
 let train,trainImage;
 let leftBoundary,rightBoundary;
 let sound;
+let road;
 
-
+function preload() {
+  road = loadImage("roadImg.png");
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 }
 
 function draw() {
-  background(220);
-  rect(50, 50, 50, 50);
+  image(road, 0, 0, width, height);
 }
