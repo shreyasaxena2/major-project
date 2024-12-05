@@ -16,7 +16,11 @@
 let coingroup;
 let traingroup;
 let path,pathImage;
-let jake,jakeImage;
+let jake1;
+let jake2;
+let jake3;
+let jake4;
+let jake5;
 let coin,coinImage;
 let train,trainImage;
 let leftBoundary,rightBoundary;
