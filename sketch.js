@@ -21,7 +21,9 @@ let jake2;
 let jake3;
 let jake4;
 let jake5;
-let coin,coinImage;
+let coin;
+let coinArray;
+
 let train,trainImage;
 let leftBoundary,rightBoundary;
 let sound;
@@ -29,6 +31,11 @@ let road;
 
 function preload() {
   road = loadImage("roadImg.png");
+  jake1 = loadImage("jake1.png");
+  jake2 = loadImage("jake2.png");
+  jake3 = loadImage("jake3.png");
+  jake4 = loadImage("jake4.png");
+  jake5 = loadImage("jake5.png");
 }
 
 function setup() {
@@ -37,4 +44,49 @@ function setup() {
 
 function draw() {
   image(road, 0, 0, width, height);
+}
+
+
+function moveTrain() {
+
+}
+
+//Variables for image files.
+let flower1;
+let flower2;
+let flower3;
+let water;
+
+//y coordinate for all images
+let flowerY = 200;
+
+function preload() {
+  // Load the image files.
+  flower1 = loadImage("flower-1.png");
+  flower2 = loadImage("flower-2.png");
+  flower3 = loadImage("flower-3.png");
+  water = loadImage("Water.gif");
+}
+
+function setup() {
+  // Set a 400x400 px canvas.
+  createCanvas(400,400);
+
+  // Position images using
+  // center coordinates.
+  imageMode(CENTER);
+
+  // Resize the flower images.
+  flower1.resize(100, 100);
+  flower2.resize(100, 100);
+  flower3.resize(100, 100);
+}
+
+function draw() {
+  background(255);
+
+  // Draw the static flower images as one row.
+  image(flower1, 100, flowerY);
+  image(flower2, 200, flowerY);
+  image(flower3, 300, flowerY);
 }
