@@ -23,14 +23,31 @@ let jake4;
 let jake5;
 let coin;
 let coinArray;
-
+let 
 let train,trainImage;
 let leftBoundary,rightBoundary;
 let sound;
-let road;
+let ROAD = 1;
+let YELLOW_LINE = 0;
+let rows;
+let cols;
+
+
+let hardcodedGrid = [
+  [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
+  [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
+  [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
+  [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
+  [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
+  [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
+  [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
+  [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
+  [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
+  [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
+];
+
 
 function preload() {
-  road = loadImage("roadImg.png");
   jake1 = loadImage("jake1.png");
   jake2 = loadImage("jake2.png");
   jake3 = loadImage("jake3.png");
@@ -43,50 +60,21 @@ function setup() {
 }
 
 function draw() {
-  image(road, 0, 0, width, height);
+  drawGrid();
 }
 
 
-function moveTrain() {
+function drawGrid() {
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
 
-}
+      if (hardcodedGrid[y][x] === ROAD) {
+        fill("black");
+      }
 
-//Variables for image files.
-let flower1;
-let flower2;
-let flower3;
-let water;
-
-//y coordinate for all images
-let flowerY = 200;
-
-function preload() {
-  // Load the image files.
-  flower1 = loadImage("flower-1.png");
-  flower2 = loadImage("flower-2.png");
-  flower3 = loadImage("flower-3.png");
-  water = loadImage("Water.gif");
-}
-
-function setup() {
-  // Set a 400x400 px canvas.
-  createCanvas(400,400);
-
-  // Position images using
-  // center coordinates.
-  imageMode(CENTER);
-
-  // Resize the flower images.
-  flower1.resize(100, 100);
-  flower2.resize(100, 100);
-  flower3.resize(100, 100);
-}
-
-function draw() {
-  background(255);
-
-  // Draw the static flower images as one row.
-  image(flower1, 100, flowerY);
-  image(flower2, 200, flowerY);
-  image(flower3, 300, flowerY);
+      else {
+        fill("yellow");
+      }
+    }
+  }
 }
