@@ -22,33 +22,57 @@ let playerY;
 let coins = [];
 let coinX;
 let coinY;
+let gameStarted = false;
 
 
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  cellWidth = width / cols; // Width of each cell
-  cellHeight = height / rows; // Height of each cell
-  playerX = cellWidth; // Start in the middle column
-  playerY = height - cellHeight; // Start in the bottom row
+  cellWidth = width / cols;
+  cellHeight = height / rows;
+  playerX = cellWidth;
+  playerY = height - cellHeight;
 
+  
 
-  for (let i = 0; i < 5; i++) { // Adjust the number of coins as needed
-    coins.push({
+  for (let i = 0; i < 5; i++) {
+    let coin = {
       x: floor(random(cols)) * cellWidth,
       y: floor(random(rows)) * cellHeight,
       visible: true
-    }
-    );
+    };
+    coins.push(coin);
   }
 
 }
 
 function draw() {
-  drawGrid();
-  displayPlayer();
-  displayCoins();
-  collisionCheck();
+  startScreen();
+  if (gameStarted) {
+    drawGrid();
+    displayPlayer();
+    displayCoins();
+    collisionCheck();
+  }
+  
+}
+
+function mousePressed() {
+  if (gameStarted === false) {
+    gameStarted = true;
+  }
+}
+
+function startScreen() {
+  background("lightblue");
+
+  textAlign(CENTER);
+  fill(0);
+  textSize(24);
+  text("Subway Surfers", width / 2, height / 2 - 40);
+  textSize(16);
+  text("Click anywhere to start", width / 2, height / 2 + 10);
+  text("Use the Left, Right, Up and Down arrow to naviagte", width / 2, height / 2 + 40);
 }
 
 function drawGrid() {
@@ -56,7 +80,7 @@ function drawGrid() {
     for (let y = 0; y < height; y += cellHeight) {
       stroke("yellow"); 
       fill("grey"); 
-      rect(x, y, cellWidth, cellHeight); // Draw a rectangle
+      rect(x, y, cellWidth, cellHeight);
     }
   }
 }
@@ -64,7 +88,7 @@ function drawGrid() {
 function displayPlayer() {
   fill("red");
   noStroke();
-  circle(playerX + cellWidth / 2, playerY + cellHeight / 2, cellWidth * 0.4);
+  circle(playerX + cellWidth / 2, playerY + cellHeight / 2, cellWidth * 0.2  );
 }
 
 function displayCoins() {
@@ -72,7 +96,7 @@ function displayCoins() {
     if (coin.visible) {
       fill("blue");
       noStroke();
-      circle(coin.x + cellWidth / 2, coin.y + cellHeight / 2, cellWidth * 0.4);
+      circle(coin.x + cellWidth / 2, coin.y + cellHeight / 2, cellWidth * 0.2);
     }
   }
 }
