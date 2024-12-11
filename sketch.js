@@ -13,68 +13,99 @@
 
 // https://editor.p5js.org/gargivanshika/sketches/532yOD6La
 
-let coingroup;
-let traingroup;
-let path,pathImage;
-let jake1;
-let jake2;
-let jake3;
-let jake4;
-let jake5;
-let coin;
-let coinArray;
-let 
-let train,trainImage;
-let leftBoundary,rightBoundary;
-let sound;
-let ROAD = 1;
-let YELLOW_LINE = 0;
-let rows;
-let cols;
+let cols = 3; // Number of columns
+let rows = 6; // Number of rows
+let cellWidth;
+let cellHeight;
+let playerX;
+let playerY;
+let coins = [];
+let coinX;
+let coinY;
 
 
-let hardcodedGrid = [
-  [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
-  [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
-  [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
-  [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
-  [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
-  [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
-  [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
-  [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
-  [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
-  [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
-];
-
-
-function preload() {
-  jake1 = loadImage("jake1.png");
-  jake2 = loadImage("jake2.png");
-  jake3 = loadImage("jake3.png");
-  jake4 = loadImage("jake4.png");
-  jake5 = loadImage("jake5.png");
-}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  cellWidth = width / cols; // Width of each cell
+  cellHeight = height / rows; // Height of each cell
+  playerX = cellWidth; // Start in the middle column
+  playerY = height - cellHeight; // Start in the bottom row
+
+
+  for (let i = 0; i < 5; i++) { // Adjust the number of coins as needed
+    coins.push({
+      x: floor(random(cols)) * cellWidth,
+      y: floor(random(rows)) * cellHeight,
+      visible: true
+    }
+    );
+  }
+
 }
 
 function draw() {
   drawGrid();
+  displayPlayer();
+  displayCoins();
+  collisionCheck();
+}
+
+function drawGrid() {
+  for (let x = 0; x < width; x += cellWidth) {
+    for (let y = 0; y < height; y += cellHeight) {
+      stroke("yellow"); 
+      fill("grey"); 
+      rect(x, y, cellWidth, cellHeight); // Draw a rectangle
+    }
+  }
+}
+
+function displayPlayer() {
+  fill("red");
+  noStroke();
+  circle(playerX + cellWidth / 2, playerY + cellHeight / 2, cellWidth * 0.4);
+}
+
+function displayCoins() {
+  for (let coin of coins) {
+    if (coin.visible) {
+      fill("blue");
+      noStroke();
+      circle(coin.x + cellWidth / 2, coin.y + cellHeight / 2, cellWidth * 0.4);
+    }
+  }
 }
 
 
-function drawGrid() {
-  for (let y = 0; y < rows; y++) {
-    for (let x = 0; x < cols; x++) {
+function collisionCheck() {
+  for (let coin of coins) {
+    if (coin.visible && playerX === coin.x && playerY === coin.y) {
+      coin.visible = false;
+    }
+  }
+}
 
-      if (hardcodedGrid[y][x] === ROAD) {
-        fill("black");
-      }
 
-      else {
-        fill("yellow");
-      }
+function keyPressed() {
+  if (keyCode === LEFT_ARROW) {
+    if (playerX - cellWidth >= 0) {
+      playerX -= cellWidth;
+    }
+  }
+  else if (keyCode === RIGHT_ARROW) {
+    if (playerX + cellWidth < width) {
+      playerX += cellWidth;
+    }
+  }
+  else if (keyCode === UP_ARROW) {
+    if (playerY - cellHeight >= -cellHeight) {
+      playerY -= cellHeight;
+    }
+  }
+  else if (keyCode === DOWN_ARROW) {
+    if (playerY + cellHeight < height) {
+      playerY += cellHeight;
     }
   }
 }
