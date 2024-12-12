@@ -20,9 +20,9 @@ let cellHeight;
 let playerX;
 let playerY;
 let coins = [];
-let coinX;
-let coinY;
 let gameStarted = false;
+let obsArray = [];
+let obstacle;
 
 
 
@@ -44,6 +44,12 @@ function setup() {
     coins.push(coin);
   }
 
+
+  for (let x = 0; x < 3; x++) {
+    createObstacles();
+  }
+
+
 }
 
 function draw() {
@@ -53,9 +59,11 @@ function draw() {
     displayPlayer();
     displayCoins();
     collisionCheck();
+    showObstacle();
   }
   
 }
+
 
 function mousePressed() {
   if (gameStarted === false) {
@@ -107,6 +115,26 @@ function collisionCheck() {
     if (coin.visible && playerX === coin.x && playerY === coin.y) {
       coin.visible = false;
     }
+  }
+}
+
+
+function createObstacles() {
+  obstacle = {
+    x: random(0, width),
+    y: random(0, height),
+    width: 50,
+    height: 50,
+  },
+
+  obsArray.push(obstacle);
+}
+
+function showObstacle() {
+  for (obstacle of obsArray) {
+    noStroke();
+    fill("pink");
+    rect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
   }
 }
 
