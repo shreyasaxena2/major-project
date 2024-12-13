@@ -23,6 +23,7 @@ let coins = [];
 let gameStarted = false;
 let obsArray = [];
 let obstacle;
+let stopDistance = 50;
 
 
 
@@ -123,8 +124,9 @@ function createObstacles() {
   obstacle = {
     x: random(0, width),
     y: random(0, height),
-    width: 50,
-    height: 50,
+    width: 80,
+    height: 80,
+    speed: random(2, 5),
   },
 
   obsArray.push(obstacle);
@@ -135,6 +137,17 @@ function showObstacle() {
     noStroke();
     fill("pink");
     rect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+  }
+}
+
+
+function moveObstacles() {
+  for (let obstacle of obsArray) {
+    obstacle.y += obstacle.speed;
+
+    if (obstacle.y > height - stopDistance - obstacle.width) {
+      obstacle.y = -
+    }
   }
 }
 
