@@ -146,7 +146,8 @@ function moveObstacles() {
     obstacle.y += obstacle.speed;
 
     if (obstacle.y > height - stopDistance - obstacle.width) {
-      obstacle.y = -
+      obstacle.y = -obstacle.width;
+      obstacle.x = random(0, width);
     }
   }
 }
