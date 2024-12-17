@@ -25,6 +25,13 @@ let obsArray = [];
 let obstacle;
 let stopDistance = 50;
 
+let hardCodedGrid = [[1, 1, 1], 
+  [1, 1, 1],
+  [1, 1, 1],
+  [1, 1, 1],
+  [1, 1, 1],
+  [1, 1, 1]];
+
 
 
 function setup() {
