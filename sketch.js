@@ -182,3 +182,11 @@ function keyPressed() {
     }
   }
 }
+
+function keepHighScore() {
+  
+}
+
+function highScoreScreen() {
+
+}
