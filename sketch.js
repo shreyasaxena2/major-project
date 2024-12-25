@@ -24,13 +24,18 @@ let gameStarted = false;
 let obsArray = [];
 let obstacle;
 let stopDistance = 50;
+let gameOver = false;
+let gameWon = false;
 
-let hardCodedGrid = [[1, 1, 1], 
-  [1, 1, 1],
-  [1, 1, 1],
-  [1, 1, 1],
-  [1, 1, 1],
-  [1, 1, 1]];
+let hardCodedGrid = [
+  [1, 0, 1], 
+  [0, 2, 0],
+  [1, 0, 0],
+  [0, 1, 2],
+  [1, 0, 0],
+  [0, 0, 1]
+];
+
 
 
 
@@ -40,42 +45,35 @@ function setup() {
   cellHeight = height / rows;
   playerX = cellWidth;
   playerY = height - cellHeight;
-
-  
-
-  for (let i = 0; i < 5; i++) {
-    let coin = {
-      x: floor(random(cols)) * cellWidth,
-      y: floor(random(rows)) * cellHeight,
-      visible: true
-    };
-    coins.push(coin);
-  }
-
-
-  for (let x = 0; x < 3; x++) {
-    createObstacles();
-  }
-
-
 }
 
 function draw() {
-  startScreen();
-  if (gameStarted) {
+  if (gameWon) {
+    gameWonScreen();
+  }
+  if (gameOver) {
+    endScreen();
+  }
+  else if (!gameStarted) {
+    startScreen();
+  }
+
+  else {
     drawGrid();
     displayPlayer();
-    displayCoins();
+    displayCoinsandObstacles();
     collisionCheck();
-    showObstacle();
   }
   
 }
 
 
 function mousePressed() {
-  if (gameStarted === false) {
+  if (!gameStarted && !gameOver) {
     gameStarted = true;
+  }
+  else if (gameOver) {
+    resetGame();
   }
 }
 
@@ -91,12 +89,34 @@ function startScreen() {
   text("Use the Left, Right, Up and Down arrow to naviagte", width / 2, height / 2 + 40);
 }
 
+function endScreen() {
+  background("red");
+  textAlign(CENTER);
+  fill(255);
+  textSize(24);
+  text("Game Over!", width / 2, height / 2 - 40);
+  textSize(16);
+  text("Click anywhere to restart", width / 2, height / 2 + 10);
+}
+
+function gameWonScreen() {
+  background("green");
+  textAlign(CENTER);
+  fill(255);
+  textSize(24);
+  text("Congratulations!", width / 2, height / 2 - 40);
+  textSize(16);
+  text("You've collected all coins!", width / 2, height / 2);
+  text("Click anywhere to restart", width / 2, height / 2 + 40);
+}
+
+
 function drawGrid() {
-  for (let x = 0; x < width; x += cellWidth) {
-    for (let y = 0; y < height; y += cellHeight) {
+  for (let x = 0; x < cols; x++) {
+    for (let y = 0; y < rows; y++) {
       stroke("yellow"); 
       fill("grey"); 
-      rect(x, y, cellWidth, cellHeight);
+      rect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
     }
   }
 }
@@ -104,60 +124,62 @@ function drawGrid() {
 function displayPlayer() {
   fill("red");
   noStroke();
-  circle(playerX + cellWidth / 2, playerY + cellHeight / 2, cellWidth * 0.2  );
+  circle(playerX + cellWidth / 2, playerY + cellHeight / 2, cellWidth * 0.2);
 }
 
-function displayCoins() {
-  for (let coin of coins) {
-    if (coin.visible) {
-      fill("blue");
-      noStroke();
-      circle(coin.x + cellWidth / 2, coin.y + cellHeight / 2, cellWidth * 0.2);
+function displayCoinsandObstacles() {
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      let cellValue = hardCodedGrid[y][x];
+      if (cellValue === 1) {
+        fill("blue");
+        noStroke();
+        circle(x * cellWidth + cellWidth / 2, y * cellHeight + cellHeight / 2, cellWidth * 0.2);
+      }
+      else if (cellValue === 2) {
+        fill("pink");
+        noStroke();
+        rect(x * cellWidth + cellWidth * 0.25, y * cellHeight + cellHeight * 0.25, cellWidth * 0.5, cellHeight * 0.5);
+      }
     }
   }
 }
 
 
 function collisionCheck() {
-  for (let coin of coins) {
-    if (coin.visible && playerX === coin.x && playerY === coin.y) {
-      coin.visible = false;
-    }
+  let playerCol = floor(playerX / cellWidth);
+  let playerRow = floor(playerY / cellHeight);
+
+  if (hardCodedGrid[playerRow][playerCol] === 1) {
+    hardCodedGrid[playerRow][playerCol] = 0; // removes coin to say collected
+  }
+
+  if(hardCodedGrid[playerRow][playerCol] === 2) {
+    gameOver = true;
   }
 }
 
 
-function createObstacles() {
-  obstacle = {
-    x: random(0, width),
-    y: random(0, height),
-    width: 80,
-    height: 80,
-    speed: random(2, 5),
-  },
 
-  obsArray.push(obstacle);
+
+function resetGame() {
+  gameOver = false;
+  gameStarted = false;
+  gameWon = false;
+  playerX = cellWidth;
+  playerY = height - cellHeight;
+
+  hardCodedGrid = [
+    [1, 0, 1], 
+    [0, 2, 0],
+    [1, 0, 0],
+    [0, 1, 2],
+    [1, 0, 0],
+    [0, 0, 1]
+  ];
 }
 
-function showObstacle() {
-  for (obstacle of obsArray) {
-    noStroke();
-    fill("pink");
-    rect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-  }
-}
 
-
-function moveObstacles() {
-  for (let obstacle of obsArray) {
-    obstacle.y += obstacle.speed;
-
-    if (obstacle.y > height - stopDistance - obstacle.width) {
-      obstacle.y = -obstacle.width;
-      obstacle.x = random(0, width);
-    }
-  }
-}
 
 
 function keyPressed() {
@@ -183,10 +205,10 @@ function keyPressed() {
   }
 }
 
-function keepHighScore() {
+// function keepHighScore() {
   
-}
+// }
 
-function highScoreScreen() {
+// function highScoreScreen() {
 
-}
+// }
