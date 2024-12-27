@@ -45,6 +45,8 @@ function setup() {
   cellHeight = height / rows;
   playerX = cellWidth;
   playerY = height - cellHeight;
+
+  randomize();
 }
 
 function draw() {
@@ -65,6 +67,31 @@ function draw() {
     collisionCheck();
   }
   
+}
+
+
+function randomize() {
+  for (let i = 0; i < 3; i++) {
+    let obsSet = false;
+    for (let j = 0; j < 6; j++) {
+      let x = floor(random(0, 3));
+      if (x === 2) {
+        if (obsSet === false) {
+          obsSet = true;
+          hardCodedGrid[j][i] = x;
+        }
+        else {
+          hardCodedGrid[j][i] = floor(random(0, 2));
+        }  
+      }
+      else {
+        hardCodedGrid[j][i] = x;
+      }
+
+      console.log(hardCodedGrid[j][i]);
+    }
+  }
+  hardCodedGrid[5][1] = 0;
 }
 
 
@@ -169,14 +196,7 @@ function resetGame() {
   playerX = cellWidth;
   playerY = height - cellHeight;
 
-  hardCodedGrid = [
-    [1, 0, 1], 
-    [0, 2, 0],
-    [1, 0, 0],
-    [0, 1, 2],
-    [1, 0, 0],
-    [0, 0, 1]
-  ];
+  randomize();
 }
 
 
@@ -205,10 +225,10 @@ function keyPressed() {
   }
 }
 
-// function keepHighScore() {
+function keepHighScore() {
   
-// }
+}
 
-// function highScoreScreen() {
+function highScoreScreen() {
 
-// }
+}
