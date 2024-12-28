@@ -6,12 +6,6 @@
 // - describe what you did to take this project "above and beyond"
 
 
-// https://creatorset.com/products/subway-surfers-jake-running
-// https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.reddit.com
-// %2Fr%2Fnycrail%2Fcomments%2Fw4xnxt%2Fsomething_that_resembles_an_r160143_in_subway%2F&psig=AOvVaw3ETeDZRs9vKP8O6k6Sg0B2&ust=173282445
-// 9999000&source=images&cd=vfe&opi=89978449&ved=0CBcQjhxqFwoTCLjZ18Ko_YkDFQAAAAAdAAAAABAE
-
-// https://editor.p5js.org/gargivanshika/sketches/532yOD6La
 
 let cols = 3; // Number of columns
 let rows = 6; // Number of rows
@@ -26,6 +20,8 @@ let obstacle;
 let stopDistance = 50;
 let gameOver = false;
 let gameWon = false;
+let coinCount = 0;
+let scoreCount = 0;
 
 let hardCodedGrid = [
   [1, 0, 1], 
@@ -70,29 +66,6 @@ function draw() {
 }
 
 
-function randomize() {
-  for (let i = 0; i < 3; i++) {
-    let obsSet = false;
-    for (let j = 0; j < 6; j++) {
-      let x = floor(random(0, 3));
-      if (x === 2) {
-        if (obsSet === false) {
-          obsSet = true;
-          hardCodedGrid[j][i] = x;
-        }
-        else {
-          hardCodedGrid[j][i] = floor(random(0, 2));
-        }  
-      }
-      else {
-        hardCodedGrid[j][i] = x;
-      }
-
-      console.log(hardCodedGrid[j][i]);
-    }
-  }
-  hardCodedGrid[5][1] = 0;
-}
 
 
 function mousePressed() {
@@ -133,7 +106,7 @@ function gameWonScreen() {
   textSize(24);
   text("Congratulations!", width / 2, height / 2 - 40);
   textSize(16);
-  text("You've collected all coins!", width / 2, height / 2);
+  text("You've collected all coins! And your score is " + scoreCount + "!", width / 2, height / 2);
   text("Click anywhere to restart", width / 2, height / 2 + 40);
 }
 
@@ -147,6 +120,48 @@ function drawGrid() {
     }
   }
 }
+
+
+function randomize() {
+  for (let i = 0; i < 3; i++) {
+    let obsSet = false;
+    for (let j = 0; j < 6; j++) {
+      let x = floor(random(0, 3));
+      if (x === 2) {
+        if (obsSet === false) {
+          obsSet = true;
+          hardCodedGrid[j][i] = x;
+        }
+        else {
+          hardCodedGrid[j][i] = floor(random(0, 2));
+        }  
+      }
+      else {
+        hardCodedGrid[j][i] = x;
+      }
+
+      console.log(hardCodedGrid[j][i]);
+    }
+  }
+  hardCodedGrid[5][1] = 0;
+
+
+  calculateCoinCount();
+}
+
+
+
+function calculateCoinCount() {
+  coinCount = 0;
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      if (hardCodedGrid[y][x] === 1) {
+        coinCount++;
+      }
+    }
+  }
+}
+
 
 function displayPlayer() {
   fill("red");
@@ -178,10 +193,14 @@ function collisionCheck() {
   let playerRow = floor(playerY / cellHeight);
 
   if (hardCodedGrid[playerRow][playerCol] === 1) {
-    hardCodedGrid[playerRow][playerCol] = 0; // removes coin to say collected
+    hardCodedGrid[playerRow][playerCol] = 0;
+    scoreCount++;
+    if (scoreCount === coinCount) {
+      gameWon = true;
+    }
   }
 
-  if(hardCodedGrid[playerRow][playerCol] === 2) {
+  if (hardCodedGrid[playerRow][playerCol] === 2) {
     gameOver = true;
   }
 }
@@ -195,6 +214,7 @@ function resetGame() {
   gameWon = false;
   playerX = cellWidth;
   playerY = height - cellHeight;
+  scoreCount = 0;
 
   randomize();
 }
@@ -214,8 +234,15 @@ function keyPressed() {
     }
   }
   else if (keyCode === UP_ARROW) {
-    if (playerY - cellHeight >= -cellHeight) {
-      playerY -= cellHeight;
+    if (keyIsDown(SHIFT)) {
+      if (playerY - 2 * cellHeight >= -cellHeight) {
+        playerY -= 2 * cellHeight;
+      }
+    } 
+    else {
+      if (playerY - cellHeight >= -cellHeight) {
+        playerY -= cellHeight; // Move up one cell
+      }
     }
   }
   else if (keyCode === DOWN_ARROW) {
