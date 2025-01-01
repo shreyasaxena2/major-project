@@ -61,6 +61,8 @@ function draw() {
     displayPlayer();
     displayCoinsandObstacles();
     collisionCheck();
+    displayScore();
+    displayHighScore();
   }
   
 }
@@ -106,8 +108,25 @@ function gameWonScreen() {
   textSize(24);
   text("Congratulations!", width / 2, height / 2 - 40);
   textSize(16);
-  text("You've collected all coins! And your score is " + scoreCount + "!", width / 2, height / 2);
+  text("You've collected all coins!", width / 2, height / 2);
   text("Click anywhere to restart", width / 2, height / 2 + 40);
+}
+
+
+function displayScore() {
+  fill(255);
+  textSize(20);
+  textAlign(RIGHT, TOP);
+  text("Score: " + scoreCount, width - 10, 10);
+}
+
+
+function displayHighScore() {
+  fill(255);
+  textSize(20);
+  textAlign(LEFT, TOP);
+  let highScore = localStorage.getItem("highScore") || 0;
+  text("High Score: " + highScore, 10, 10);
 }
 
 
@@ -121,6 +140,17 @@ function drawGrid() {
   }
 }
 
+
+function calculateCoinCount() {
+  coinCount = 0;
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      if (hardCodedGrid[y][x] === 1) {
+        coinCount++;
+      }
+    }
+  }
+}
 
 function randomize() {
   for (let i = 0; i < 3; i++) {
@@ -150,17 +180,6 @@ function randomize() {
 }
 
 
-
-function calculateCoinCount() {
-  coinCount = 0;
-  for (let y = 0; y < rows; y++) {
-    for (let x = 0; x < cols; x++) {
-      if (hardCodedGrid[y][x] === 1) {
-        coinCount++;
-      }
-    }
-  }
-}
 
 
 function displayPlayer() {
@@ -209,6 +228,12 @@ function collisionCheck() {
 
 
 function resetGame() {
+  let highScore = localStorage.getItem("highScore") || 0; // Retrieve high score or default to 0
+  if (scoreCount > highScore) {
+    localStorage.setItem("highScore", scoreCount); // Update high score in localStorage
+  }
+
+
   gameOver = false;
   gameStarted = false;
   gameWon = false;
@@ -250,12 +275,4 @@ function keyPressed() {
       playerY += cellHeight;
     }
   }
-}
-
-function keepHighScore() {
-  
-}
-
-function highScoreScreen() {
-
 }
