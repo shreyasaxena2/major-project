@@ -7,8 +7,8 @@
 
 
 
-let cols = 3; // Number of columns
-let rows = 6; // Number of rows
+let cols = 3;
+let rows = 6;
 let cellWidth;
 let cellHeight;
 let playerX;
@@ -22,6 +22,9 @@ let gameOver = false;
 let gameWon = false;
 let coinCount = 0;
 let scoreCount = 0;
+let level = 1;
+let timeLeft;
+let timerInterval;
 
 let hardCodedGrid = [
   [1, 0, 1], 
@@ -43,17 +46,19 @@ function setup() {
   playerY = height - cellHeight;
 
   randomize();
+  calculateCoinCount();
 }
 
 function draw() {
-  if (gameWon) {
-    gameWonScreen();
-  }
-  if (gameOver) {
-    endScreen();
-  }
-  else if (!gameStarted) {
+  if (!gameStarted && !gameOver) {
     startScreen();
+  }
+  else if (gameOver) {
+    gameOverScreen();
+  }
+  
+  else if (gameWon) {
+    LevelUpScreen();
   }
 
   else {
@@ -63,10 +68,10 @@ function draw() {
     collisionCheck();
     displayScore();
     displayHighScore();
+    displayTimer();
   }
   
 }
-
 
 
 
@@ -79,19 +84,21 @@ function mousePressed() {
   }
 }
 
+
+
 function startScreen() {
   background("lightblue");
 
   textAlign(CENTER);
   fill(0);
   textSize(24);
-  text("Subway Surfers", width / 2, height / 2 - 40);
+  text("Game", width / 2, height / 2 - 40);
   textSize(16);
   text("Click anywhere to start", width / 2, height / 2 + 10);
-  text("Use the Left, Right, Up and Down arrow to naviagte", width / 2, height / 2 + 40);
+  text("Use the Left, Right, Up and Down arrow to naviagte. Shift and Arrows to jump.", width / 2, height / 2 + 40);
 }
 
-function endScreen() {
+function gameOverScreen() {
   background("red");
   textAlign(CENTER);
   fill(255);
@@ -101,15 +108,15 @@ function endScreen() {
   text("Click anywhere to restart", width / 2, height / 2 + 10);
 }
 
-function gameWonScreen() {
+function levelUpScreen() {
   background("green");
   textAlign(CENTER);
   fill(255);
   textSize(24);
-  text("Congratulations!", width / 2, height / 2 - 40);
+  text(`Level ${level} Complete!`, width / 2, height / 2 - 40);
   textSize(16);
-  text("You've collected all coins!", width / 2, height / 2);
-  text("Click anywhere to restart", width / 2, height / 2 + 40);
+  text("Click anywhere to continue", width / 2, height / 2);
+  text("Good Luck!", width / 2, height / 2 + 40);
 }
 
 
@@ -127,6 +134,14 @@ function displayHighScore() {
   textAlign(LEFT, TOP);
   let highScore = localStorage.getItem("highScore") || 0;
   text("High Score: " + highScore, 10, 10);
+}
+
+
+function displayTimer() {
+  fill(255);
+  textSize(20);
+  textAlign(CENTER);
+  text("Time Remaining: " + timeRemaining + "s", width / 2, 10);
 }
 
 
@@ -188,6 +203,8 @@ function displayPlayer() {
   circle(playerX + cellWidth / 2, playerY + cellHeight / 2, cellWidth * 0.2);
 }
 
+
+
 function displayCoinsandObstacles() {
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
@@ -215,22 +232,28 @@ function collisionCheck() {
     hardCodedGrid[playerRow][playerCol] = 0;
     scoreCount++;
     if (scoreCount === coinCount) {
-      gameWon = true;
+      clearInterval(timerInterval);
+      levelUpScreen();
     }
   }
 
   if (hardCodedGrid[playerRow][playerCol] === 2) {
+    clearInterval(timerInterval);
     gameOver = true;
   }
 }
 
 
+function levelOne() {
+
+}
+
 
 
 function resetGame() {
-  let highScore = localStorage.getItem("highScore") || 0; // Retrieve high score or default to 0
+  let highScore = localStorage.getItem("highScore") || 0;
   if (scoreCount > highScore) {
-    localStorage.setItem("highScore", scoreCount); // Update high score in localStorage
+    localStorage.setItem("highScore", scoreCount);
   }
 
 
@@ -253,11 +276,14 @@ function keyPressed() {
       playerX -= cellWidth;
     }
   }
+
   else if (keyCode === RIGHT_ARROW) {
     if (playerX + cellWidth < width) {
       playerX += cellWidth;
     }
   }
+
+
   else if (keyCode === UP_ARROW) {
     if (keyIsDown(SHIFT)) {
       if (playerY - 2 * cellHeight >= -cellHeight) {
@@ -266,10 +292,12 @@ function keyPressed() {
     } 
     else {
       if (playerY - cellHeight >= -cellHeight) {
-        playerY -= cellHeight; // Move up one cell
+        playerY -= cellHeight;
       }
     }
   }
+
+
   else if (keyCode === DOWN_ARROW) {
     if (playerY + cellHeight < height) {
       playerY += cellHeight;
