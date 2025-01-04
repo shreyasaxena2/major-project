@@ -24,7 +24,7 @@ let coinCount = 0;
 let scoreCount = 0;
 let level = 1;
 let timeLeft;
-let timerInterval;
+let startTime;
 
 let hardCodedGrid = [
   [1, 0, 1], 
@@ -140,9 +140,19 @@ function displayHighScore() {
 function displayTimer() {
   fill(255);
   textSize(20);
-  textAlign(CENTER);
+  textAlign(CENTER, TOP);
+  timeRemaining = max(0, floor((timeLimit() - millis()) / 1000));
   text("Time Remaining: " + timeRemaining + "s", width / 2, 10);
+  if (timeRemaining === 0) {
+    gameOver = true;
+  }
 }
+
+
+function timeLimit() {
+  return startTime + (45 - (level - 1) * 15) * 1000;
+}
+
 
 
 function drawGrid() {
@@ -232,20 +242,32 @@ function collisionCheck() {
     hardCodedGrid[playerRow][playerCol] = 0;
     scoreCount++;
     if (scoreCount === coinCount) {
-      clearInterval(timerInterval);
-      levelUpScreen();
+      levelUp();
     }
   }
 
   if (hardCodedGrid[playerRow][playerCol] === 2) {
-    clearInterval(timerInterval);
     gameOver = true;
   }
 }
 
 
-function levelOne() {
+function startLevel() {
+  startTime = millis();
+}
 
+
+function levelUp() {
+  if (level === 3) {
+    gameWon = true;
+    return;
+  }
+  level++;
+  playerX = cellWidth;
+  playerY = height - cellHeight;
+  randomize();
+  calculateCoinCount();
+  startLevel();
 }
 
 
@@ -265,41 +287,36 @@ function resetGame() {
   scoreCount = 0;
 
   randomize();
+  calculateCoinCount();
 }
 
 
-
-
 function keyPressed() {
-  if (keyCode === LEFT_ARROW) {
-    if (playerX - cellWidth >= 0) {
-      playerX -= cellWidth;
-    }
-  }
-
-  else if (keyCode === RIGHT_ARROW) {
-    if (playerX + cellWidth < width) {
-      playerX += cellWidth;
-    }
-  }
-
-
-  else if (keyCode === UP_ARROW) {
-    if (keyIsDown(SHIFT)) {
-      if (playerY - 2 * cellHeight >= -cellHeight) {
-        playerY -= 2 * cellHeight;
-      }
+  if (keyIsDown(SHIFT)) {
+    if (keyCode === UP_ARROW && playerY - 2 * cellHeight >= 0) {
+      playerY -= 2 * cellHeight;
     } 
-    else {
-      if (playerY - cellHeight >= -cellHeight) {
-        playerY -= cellHeight;
-      }
+    else if (keyCode === DOWN_ARROW && playerY + 2 * cellHeight < height) {
+      playerY += 2 * cellHeight;
+    } 
+    else if (keyCode === LEFT_ARROW && playerX - 2 * cellWidth >= 0) {
+      playerX -= 2 * cellWidth;
+    } 
+    else if (keyCode === RIGHT_ARROW && playerX + 2 * cellWidth < width) {
+      playerX += 2 * cellWidth;
     }
-  }
-
-
-  else if (keyCode === DOWN_ARROW) {
-    if (playerY + cellHeight < height) {
+  } 
+  else {
+    if (keyCode === LEFT_ARROW && playerX - cellWidth >= 0) {
+      playerX -= cellWidth;
+    } 
+    else if (keyCode === RIGHT_ARROW && playerX + cellWidth < width) {
+      playerX += cellWidth;
+    } 
+    else if (keyCode === UP_ARROW && playerY - cellHeight >= 0) {
+      playerY -= cellHeight;
+    } 
+    else if (keyCode === DOWN_ARROW && playerY + cellHeight < height) {
       playerY += cellHeight;
     }
   }
