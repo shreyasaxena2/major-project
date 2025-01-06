@@ -14,17 +14,20 @@ let cellHeight;
 let playerX;
 let playerY;
 let coins = [];
-let gameStarted = false;
 let obsArray = [];
 let obstacle;
 let stopDistance = 50;
+let initialCoinCount = 0;
+let scoreCount = 0;
+let timeLeft;
+let startTime = 0;
+let overallCoinCount = 0;
+
+// game states
 let gameOver = false;
 let gameWon = false;
-let coinCount = 0;
-let scoreCount = 0;
+let gameStarted = false;
 let level = 1;
-let timeLeft;
-let startTime;
 
 let hardCodedGrid = [
   [1, 0, 1], 
@@ -46,11 +49,11 @@ function setup() {
   playerY = height - cellHeight;
 
   randomize();
-  calculateCoinCount();
+  // calculateCoinCount();
 }
 
 function draw() {
-  if (!gameStarted && !gameOver) {
+  if (!gameStarted) {
     startScreen();
   }
   else if (gameOver) {
@@ -58,7 +61,7 @@ function draw() {
   }
   
   else if (gameWon) {
-    LevelUpScreen();
+    levelUpScreen();
   }
 
   else {
@@ -78,6 +81,7 @@ function draw() {
 function mousePressed() {
   if (!gameStarted && !gameOver) {
     gameStarted = true;
+    startLevel();
   }
   else if (gameOver) {
     resetGame();
@@ -132,6 +136,7 @@ function displayHighScore() {
   fill(255);
   textSize(20);
   textAlign(LEFT, TOP);
+  console.log(' cache ', localStorage.getItem("highScore"));
   let highScore = localStorage.getItem("highScore") || 0;
   text("High Score: " + highScore, 10, 10);
 }
@@ -141,16 +146,27 @@ function displayTimer() {
   fill(255);
   textSize(20);
   textAlign(CENTER, TOP);
-  timeRemaining = max(0, floor((timeLimit() - millis()) / 1000));
+  //console.log(' time limit is ', timeLimit());
+  // console.log(' time milis is ', millis());
+  timeRemaining = max(0, floor((timeLimit() - millis())/1000));
   text("Time Remaining: " + timeRemaining + "s", width / 2, 10);
-  if (timeRemaining === 0) {
+  //text("Time Remaining: " + timeRemaining, width / 2, 10);
+  //console.log(' time remaining ', timeRemaining);
+  if (timeRemaining === 0 && scoreCount === overallCoinCount) {
+    //gameOver = true;
+    levelUp();
+  }
+  else if (timeRemaining === 0 && scoreCount < overallCoinCount) {
     gameOver = true;
   }
 }
 
 
 function timeLimit() {
-  return startTime + (45 - (level - 1) * 15) * 1000;
+  let baseTime = 45 * 1000;
+  //console.log('vele ', level);
+  let levelReduction = (level - 1) * 15 * 1000;
+  return startTime + baseTime - levelReduction;
 }
 
 
@@ -166,18 +182,19 @@ function drawGrid() {
 }
 
 
-function calculateCoinCount() {
-  coinCount = 0;
-  for (let y = 0; y < rows; y++) {
-    for (let x = 0; x < cols; x++) {
-      if (hardCodedGrid[y][x] === 1) {
-        coinCount++;
-      }
-    }
-  }
-}
+// function calculateCoinCount() {
+//   coinCount = 0;
+//   for (let y = 0; y < rows; y++) {
+//     for (let x = 0; x < cols; x++) {
+//       if (hardCodedGrid[y][x] === 1) {
+//         coinCount++;
+//       }
+//     }
+//   }
+// }
 
 function randomize() {
+  initialCoinCount = 0;
   for (let i = 0; i < 3; i++) {
     let obsSet = false;
     for (let j = 0; j < 6; j++) {
@@ -194,14 +211,25 @@ function randomize() {
       else {
         hardCodedGrid[j][i] = x;
       }
-
-      console.log(hardCodedGrid[j][i]);
+      //console.log(hardCodedGrid[j][i]);
+      if (hardCodedGrid[j][i] === 1) {
+        initialCoinCount++;
+      }
     }
+
+  }
+  //console.log(' initial coin count ', initialCoinCount)
+  overallCoinCount = overallCoinCount + initialCoinCount;
+
+  if (hardCodedGrid[5][1] === 1) {
+    //console.log(' hey i am counted above')
+    initialCoinCount -= 1;
+    overallCoinCount -= 1;
   }
   hardCodedGrid[5][1] = 0;
 
 
-  calculateCoinCount();
+  //calculateCoinCount();
 }
 
 
@@ -237,27 +265,32 @@ function displayCoinsandObstacles() {
 function collisionCheck() {
   let playerCol = floor(playerX / cellWidth);
   let playerRow = floor(playerY / cellHeight);
-
+  
   if (hardCodedGrid[playerRow][playerCol] === 1) {
+    
     hardCodedGrid[playerRow][playerCol] = 0;
     scoreCount++;
-    if (scoreCount === coinCount) {
+    // console.log('score count ', scoreCount);
+    // console.log(' overall coin count ', overallCoinCount);
+
+    if (scoreCount === overallCoinCount) {
       levelUp();
     }
   }
-
-  if (hardCodedGrid[playerRow][playerCol] === 2) {
+  else if (hardCodedGrid[playerRow][playerCol] === 2) {
     gameOver = true;
   }
 }
 
 
 function startLevel() {
+  //startTime = 0;
   startTime = millis();
 }
 
 
 function levelUp() {
+  levelUpScreen();
   if (level === 3) {
     gameWon = true;
     return;
@@ -266,14 +299,14 @@ function levelUp() {
   playerX = cellWidth;
   playerY = height - cellHeight;
   randomize();
-  calculateCoinCount();
+  //calculateCoinCount();
   startLevel();
 }
 
 
 
 function resetGame() {
-  let highScore = localStorage.getItem("highScore") || 0;
+  //let highScore = localStorage.getItem("highScore") || 0;
   if (scoreCount > highScore) {
     localStorage.setItem("highScore", scoreCount);
   }
@@ -290,7 +323,7 @@ function resetGame() {
   calculateCoinCount();
 }
 
-
+//TODO: CHeck when you hit the wall on up/down/left/right
 function keyPressed() {
   if (keyIsDown(SHIFT)) {
     if (keyCode === UP_ARROW && playerY - 2 * cellHeight >= 0) {
@@ -308,15 +341,19 @@ function keyPressed() {
   } 
   else {
     if (keyCode === LEFT_ARROW && playerX - cellWidth >= 0) {
+      //console.log('left arrow');
       playerX -= cellWidth;
     } 
     else if (keyCode === RIGHT_ARROW && playerX + cellWidth < width) {
+      //console.log('right arrow');
       playerX += cellWidth;
     } 
     else if (keyCode === UP_ARROW && playerY - cellHeight >= 0) {
+      //console.log('up arrow');
       playerY -= cellHeight;
     } 
     else if (keyCode === DOWN_ARROW && playerY + cellHeight < height) {
+      //console.log('down arrow');
       playerY += cellHeight;
     }
   }
