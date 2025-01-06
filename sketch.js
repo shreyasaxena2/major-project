@@ -74,7 +74,7 @@ function draw() {
     displayTimer();
   }
   
-}
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 
 
 
@@ -136,7 +136,7 @@ function displayHighScore() {
   fill(255);
   textSize(20);
   textAlign(LEFT, TOP);
-  console.log(' cache ', localStorage.getItem("highScore"));
+  // console.log(' cache ', localStorage.getItem("highScore"));
   let highScore = localStorage.getItem("highScore") || 0;
   text("High Score: " + highScore, 10, 10);
 }
@@ -327,33 +327,37 @@ function resetGame() {
 function keyPressed() {
   if (keyIsDown(SHIFT)) {
     if (keyCode === UP_ARROW && playerY - 2 * cellHeight >= 0) {
+      console.log('double up arrow');
       playerY -= 2 * cellHeight;
     } 
     else if (keyCode === DOWN_ARROW && playerY + 2 * cellHeight < height) {
+      console.log('double down arrow');
       playerY += 2 * cellHeight;
     } 
     else if (keyCode === LEFT_ARROW && playerX - 2 * cellWidth >= 0) {
+      console.log('double left arrow');
       playerX -= 2 * cellWidth;
     } 
     else if (keyCode === RIGHT_ARROW && playerX + 2 * cellWidth < width) {
+      console.log('double right arrow');
       playerX += 2 * cellWidth;
     }
   } 
   else {
     if (keyCode === LEFT_ARROW && playerX - cellWidth >= 0) {
-      //console.log('left arrow');
+      console.log('left arrow');
       playerX -= cellWidth;
     } 
     else if (keyCode === RIGHT_ARROW && playerX + cellWidth < width) {
-      //console.log('right arrow');
+      console.log('right arrow');
       playerX += cellWidth;
     } 
     else if (keyCode === UP_ARROW && playerY - cellHeight >= 0) {
-      //console.log('up arrow');
+      console.log('up arrow');
       playerY -= cellHeight;
     } 
     else if (keyCode === DOWN_ARROW && playerY + cellHeight < height) {
-      //console.log('down arrow');
+      console.log('down arrow');
       playerY += cellHeight;
     }
   }
