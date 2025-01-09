@@ -98,7 +98,7 @@ function startScreen() {
   textSize(24);
   text("LIFE AND RAID", width / 2, height / 2 - 40);
   textSize(16);
-  text("Click anywhere to start", width / 2, height / 2 + 10);
+  text("Click anywhere to start.", width / 2, height / 2 + 10);
   text("Use the Left, Right, Up and Down arrow to naviagte. Shift and Arrows to jump.", width / 2, height / 2 + 40);
 }
 
@@ -123,6 +123,16 @@ function levelUpScreen() {
   text("Good Luck!", width / 2, height / 2 + 40);
 }
 
+
+function gameWonScreen() {
+  background("blue");
+  textAlign(CENTER);
+  fill(255);
+  textSize(24);
+  text("Game Won!", width / 2, height / 2 - 40);
+  textSize(16);
+  text("Click anywhere to restart", width / 2, height / 2 + 10);
+}
 
 function displayScore() {
   fill(255);
