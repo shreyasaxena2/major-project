@@ -22,6 +22,8 @@ let scoreCount = 0;
 let timeLeft;
 let startTime = 0;
 let overallCoinCount = 0;
+let startScImg;
+let rulesImg;
 
 // game states
 let gameOver = false;
@@ -38,6 +40,11 @@ let hardCodedGrid = [
   [0, 0, 1]
 ];
 
+
+function preload() {
+  startScImg = loadImage("startsc.gif");
+  rulesImg = loadImage("rules.png");
+}
 
 
 
@@ -91,7 +98,8 @@ function mousePressed() {
 
 
 function startScreen() {
-  background("lightblue");
+  image(startScImg, 0, 0, windowWidth, windowHeight);
+  image(rulesImg, 0, 0, width - 10, 10);
 
   textAlign(CENTER);
   fill(0);
@@ -184,8 +192,9 @@ function timeLimit() {
 function drawGrid() {
   for (let x = 0; x < cols; x++) {
     for (let y = 0; y < rows; y++) {
-      stroke("yellow"); 
-      fill("grey"); 
+      strokeWeight(4);
+      stroke("#FF00FF"); 
+      fill("#A020F0"); 
       rect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
     }
   }
