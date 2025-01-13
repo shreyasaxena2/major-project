@@ -250,11 +250,9 @@ function randomize() {
     }
 
   }
-  //console.log(' initial coin count ', initialCoinCount)
   overallCoinCount = overallCoinCount + initialCoinCount;
 
   if (hardCodedGrid[5][1] === 1) {
-    //console.log(' hey i am counted above')
     initialCoinCount -= 1;
     overallCoinCount -= 1;
   }
@@ -302,8 +300,6 @@ function collisionCheck() {
     
     hardCodedGrid[playerRow][playerCol] = 0;
     scoreCount++;
-    // console.log('score count ', scoreCount);
-    // console.log(' overall coin count ', overallCoinCount);
 
     if (scoreCount === overallCoinCount) {
       levelUp();
@@ -316,7 +312,6 @@ function collisionCheck() {
 
 
 function startLevel() {
-  //startTime = 0;
   startTime = millis();
 }
 
@@ -354,7 +349,8 @@ function levelUp() {
 //   calculateCoinCount();
 // }
 
-//TODO: CHeck when you hit the wall on up/down/left/right
+
+
 function keyPressed() {
   if (keyIsDown(SHIFT)) {
     if (keyCode === UP_ARROW && playerY - 2 * cellHeight >= 0) {
