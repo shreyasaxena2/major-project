@@ -6,6 +6,8 @@
 // - describe what you did to take this project "above and beyond"
 
 
+// https://www.dafont.com/ethnocentric.font (TITLE FONT)
+
 
 let cols = 3;
 let rows = 6;
@@ -24,6 +26,9 @@ let startTime = 0;
 let overallCoinCount = 0;
 let startScImg;
 let rulesImg;
+let titleFont;
+let gameOverImg;
+let gameOverFont;
 
 // game states
 let gameOver = false;
@@ -44,6 +49,9 @@ let hardCodedGrid = [
 function preload() {
   startScImg = loadImage("startsc.gif");
   rulesImg = loadImage("rules.png");
+  titleFont = loadFont("titleFont.otf");
+  gameOverImg = loadImage("gameoverImg.jpg");
+  gameOverFont = loadFont("gameOverfont.ttf");
 }
 
 
@@ -68,7 +76,7 @@ function draw() {
   }
   
   else if (gameWon) {
-    levelUpScreen();
+    gameWonScreen();
   }
 
   else {
@@ -90,46 +98,50 @@ function mousePressed() {
     gameStarted = true;
     startLevel();
   }
-  else if (gameOver) {
-    resetGame();
-  }
 }
 
 
 
 function startScreen() {
   image(startScImg, 0, 0, windowWidth, windowHeight);
-  image(rulesImg, 0, 0, width - 10, 10);
+  // background("white");
+  // image(rulesImg, 0, 0, 10, 10);
 
   textAlign(CENTER);
   fill(0);
-  textSize(24);
-  text("LIFE AND RAID", width / 2, height / 2 - 40);
-  textSize(16);
-  text("Click anywhere to start.", width / 2, height / 2 + 10);
-  text("Use the Left, Right, Up and Down arrow to naviagte. Shift and Arrows to jump.", width / 2, height / 2 + 40);
+  textSize(28);
+  textFont(titleFont);
+  text("LIFE AND RAID", width / 2, 50);
+  textSize(20);
+  text("Collect the coins and avoid the obstacles.", width / 2, 90);
+  text("Click anywhere to start.", width / 2, 130);
+  text("Use the Left, Right, Up and Down arrow to naviagte. Shift and Arrows to jump.", width / 2,  170);
+  text("3 Levels. Complete within the time limit", width / 2, 220);
 }
 
 function gameOverScreen() {
-  background("red");
+  image(gameOverImg, 0, 0, windowWidth, windowHeight);
+  // background("red");
   textAlign(CENTER);
+  textFont(gameOverFont);
   fill(255);
-  textSize(24);
+  textSize(28);
   text("Game Over!", width / 2, height / 2 - 40);
-  textSize(16);
-  text("Click anywhere to restart", width / 2, height / 2 + 10);
+  textSize(24);
+  text("Your score is: " + scoreCount, width / 2, height / 2 - 5);
+  text("Refresh Screen to play again.", width / 2, height / 2 + 30);
 }
 
-function levelUpScreen() {
-  background("green");
-  textAlign(CENTER);
-  fill(255);
-  textSize(24);
-  text(`Level ${level} Complete!`, width / 2, height / 2 - 40);
-  textSize(16);
-  text("Click anywhere to continue", width / 2, height / 2);
-  text("Good Luck!", width / 2, height / 2 + 40);
-}
+// function levelUpScreen() {
+//   background("green");
+//   textAlign(CENTER);
+//   fill(255);
+//   textSize(24);
+//   text(`Level ${level} Complete!`, width / 2, height / 2 - 40);
+//   textSize(16);
+//   text("Click anywhere to continue", width / 2, height / 2);
+//   text("Good Luck!", width / 2, height / 2 + 40);
+// }
 
 
 function gameWonScreen() {
@@ -139,7 +151,8 @@ function gameWonScreen() {
   textSize(24);
   text("Game Won!", width / 2, height / 2 - 40);
   textSize(16);
-  text("Click anywhere to restart", width / 2, height / 2 + 10);
+  text("Your score is: " + scoreCount, width / 2, height / 2 - 5);
+  text("Refresh Screen to play again.", width / 2, height / 2 + 20);
 }
 
 function displayScore() {
@@ -309,7 +322,6 @@ function startLevel() {
 
 
 function levelUp() {
-  levelUpScreen();
   if (level === 3) {
     gameWon = true;
     return;
@@ -324,23 +336,23 @@ function levelUp() {
 
 
 
-function resetGame() {
-  //let highScore = localStorage.getItem("highScore") || 0;
-  if (scoreCount > highScore) {
-    localStorage.setItem("highScore", scoreCount);
-  }
+// function resetGame() {
+//   //let highScore = localStorage.getItem("highScore") || 0;
+//   if (scoreCount > highScore) {
+//     localStorage.setItem("highScore", scoreCount);
+//   }
 
 
-  gameOver = false;
-  gameStarted = false;
-  gameWon = false;
-  playerX = cellWidth;
-  playerY = height - cellHeight;
-  scoreCount = 0;
+//   gameOver = false;
+//   gameStarted = false;
+//   gameWon = false;
+//   playerX = cellWidth;
+//   playerY = height - cellHeight;
+//   scoreCount = 0;
 
-  randomize();
-  calculateCoinCount();
-}
+//   randomize();
+//   calculateCoinCount();
+// }
 
 //TODO: CHeck when you hit the wall on up/down/left/right
 function keyPressed() {
