@@ -103,8 +103,8 @@ function mousePressed() {
 
 
 function startScreen() {
-  image(startScImg, 0, 0, windowWidth, windowHeight);
-  // background("white");
+  // image(startScImg, 0, 0, windowWidth, windowHeight);
+  background("white");
   // image(rulesImg, 0, 0, 10, 10);
 
   textAlign(CENTER);
@@ -132,16 +132,7 @@ function gameOverScreen() {
   text("Refresh Screen to play again.", width / 2, height / 2 + 30);
 }
 
-// function levelUpScreen() {
-//   background("green");
-//   textAlign(CENTER);
-//   fill(255);
-//   textSize(24);
-//   text(`Level ${level} Complete!`, width / 2, height / 2 - 40);
-//   textSize(16);
-//   text("Click anywhere to continue", width / 2, height / 2);
-//   text("Good Luck!", width / 2, height / 2 + 40);
-// }
+
 
 
 function gameWonScreen() {
@@ -167,7 +158,7 @@ function displayHighScore() {
   fill(255);
   textSize(20);
   textAlign(LEFT, TOP);
-  // console.log(' cache ', localStorage.getItem("highScore"));
+  console.log(' display high score from cache ', localStorage.getItem("highScore"));
   let highScore = localStorage.getItem("highScore") || 0;
   text("High Score: " + highScore, 10, 10);
 }
@@ -214,17 +205,6 @@ function drawGrid() {
 }
 
 
-// function calculateCoinCount() {
-//   coinCount = 0;
-//   for (let y = 0; y < rows; y++) {
-//     for (let x = 0; x < cols; x++) {
-//       if (hardCodedGrid[y][x] === 1) {
-//         coinCount++;
-//       }
-//     }
-//   }
-// }
-
 function randomize() {
   initialCoinCount = 0;
   for (let i = 0; i < 3; i++) {
@@ -259,7 +239,6 @@ function randomize() {
   hardCodedGrid[5][1] = 0;
 
 
-  //calculateCoinCount();
 }
 
 
@@ -306,7 +285,9 @@ function collisionCheck() {
     }
   }
   else if (hardCodedGrid[playerRow][playerCol] === 2) {
+    // game over as result of loss
     gameOver = true;
+    resetGame();
   }
 }
 
@@ -319,6 +300,7 @@ function startLevel() {
 function levelUp() {
   if (level === 3) {
     gameWon = true;
+    resetGame();
     return;
   }
   level++;
@@ -331,23 +313,13 @@ function levelUp() {
 
 
 
-// function resetGame() {
-//   //let highScore = localStorage.getItem("highScore") || 0;
-//   if (scoreCount > highScore) {
-//     localStorage.setItem("highScore", scoreCount);
-//   }
-
-
-//   gameOver = false;
-//   gameStarted = false;
-//   gameWon = false;
-//   playerX = cellWidth;
-//   playerY = height - cellHeight;
-//   scoreCount = 0;
-
-//   randomize();
-//   calculateCoinCount();
-// }
+function resetGame() {
+  //console.log('game reset called');
+  let highScore = localStorage.getItem("highScore") || 0;
+  if (scoreCount > highScore) {
+    localStorage.setItem("highScore", scoreCount);
+  }
+}
 
 
 
