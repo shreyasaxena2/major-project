@@ -103,8 +103,8 @@ function mousePressed() {
 
 
 function startScreen() {
-  // image(startScImg, 0, 0, windowWidth, windowHeight);
-  background("white");
+  image(startScImg, 0, 0, windowWidth, windowHeight);
+  // background("white");
   // image(rulesImg, 0, 0, 10, 10);
 
   textAlign(CENTER);
