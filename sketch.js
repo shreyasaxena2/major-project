@@ -29,6 +29,7 @@ let rulesImg;
 let titleFont;
 let gameOverImg;
 let gameOverFont;
+let gameWonImg;
 
 // game states
 let gameOver = false;
@@ -52,6 +53,7 @@ function preload() {
   titleFont = loadFont("titleFont.otf");
   gameOverImg = loadImage("gameoverImg.jpg");
   gameOverFont = loadFont("gameOverfont.ttf");
+  gameWonImg = loadImage("gamewonscreen.gif");
 }
 
 
@@ -108,15 +110,16 @@ function startScreen() {
   // image(rulesImg, 0, 0, 10, 10);
 
   textAlign(CENTER);
-  fill(0);
+  fill(50);
   textSize(28);
   textFont(titleFont);
   text("LIFE AND RAID", width / 2, 50);
   textSize(20);
   text("Collect the coins and avoid the obstacles.", width / 2, 90);
   text("Click anywhere to start.", width / 2, 130);
-  text("Use the Left, Right, Up and Down arrow to naviagte. Shift and Arrows to jump.", width / 2,  170);
-  text("3 Levels. Complete within the time limit", width / 2, 220);
+  text("Use the Left, Right, Up and Down arrow to naviagte.", width / 2,  170);
+  text("Shift and Arrows to jump.", width / 2, 210);
+  text("3 Levels. Complete within the time limit", width / 2, 250);
 }
 
 function gameOverScreen() {
@@ -136,7 +139,8 @@ function gameOverScreen() {
 
 
 function gameWonScreen() {
-  background("blue");
+  image(gameWonImg, 0, 0, windowWidth, windowHeight);
+  // background("blue");
   textAlign(CENTER);
   fill(255);
   textSize(24);
