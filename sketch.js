@@ -7,6 +7,8 @@
 
 
 // https://www.dafont.com/ethnocentric.font (TITLE FONT)
+// https://www.dafont.com/game-of-squids.font (GAME OVER FONT)
+
 
 
 let cols = 3;
@@ -30,6 +32,7 @@ let titleFont;
 let gameOverImg;
 let gameOverFont;
 let gameWonImg;
+let playerImg;
 
 // game states
 let gameOver = false;
@@ -54,6 +57,7 @@ function preload() {
   gameOverImg = loadImage("gameoverImg.jpg");
   gameOverFont = loadFont("gameOverfont.ttf");
   gameWonImg = loadImage("gamewonscreen.gif");
+  playerImg = loadImage("player-Img.png");
 }
 
 
@@ -106,8 +110,6 @@ function mousePressed() {
 
 function startScreen() {
   image(startScImg, 0, 0, windowWidth, windowHeight);
-  // background("white");
-  // image(rulesImg, 0, 0, 10, 10);
 
   textAlign(CENTER);
   fill(50);
@@ -249,9 +251,11 @@ function randomize() {
 
 
 function displayPlayer() {
-  fill("red");
-  noStroke();
-  circle(playerX + cellWidth / 2, playerY + cellHeight / 2, cellWidth * 0.2);
+  // fill("red");
+  // noStroke();
+  // circle(playerX + cellWidth / 2, playerY + cellHeight / 2, cellWidth * 0.2);
+
+  image(playerImg, playerX + cellWidth/ 2.25, playerY + cellHeight / 4, cellWidth/8, cellHeight/2);
 }
 
 

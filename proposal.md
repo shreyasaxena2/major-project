@@ -5,7 +5,6 @@ I will build a simpler version of Subway Surfers. It will have a player, a polic
 ## Neds to have list
 
 - One player
-- One police officer
 - Trains and barricades as obstacles
 - Coins as reward
 - Start screen and end screen
