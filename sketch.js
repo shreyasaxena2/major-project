@@ -34,6 +34,8 @@ let gameOverFont;
 let gameWonImg;
 let playerImg;
 let coinImg;
+let obsImg;
+let soundEffect;
 
 // game states
 let gameOver = false;
@@ -60,6 +62,8 @@ function preload() {
   gameWonImg = loadImage("gamewonscreen.gif");
   playerImg = loadImage("player-Img.png");
   coinImg = loadImage("coinImg.png");
+  obsImg = loadImage("obsImg.jpg");
+  soundEffect = loadSound("coin-sound.mp3");
 }
 
 
@@ -267,9 +271,9 @@ function displayCoinsandObstacles() {
     for (let x = 0; x < cols; x++) {
       let cellValue = hardCodedGrid[y][x];
       if (cellValue === 1) {
-        fill("blue");
+        // fill("blue");
         noStroke();
-        circle(x * cellWidth + cellWidth / 2, y * cellHeight + cellHeight / 2, cellWidth * 0.2);
+        image(coinImg, x * cellWidth + cellWidth / 2 - 75, y * cellHeight + cellHeight / 2, cellWidth * 0.2, cellHeight * 0.5);
       }
       else if (cellValue === 2) {
         fill("pink");
@@ -289,6 +293,7 @@ function collisionCheck() {
     
     hardCodedGrid[playerRow][playerCol] = 0;
     scoreCount++;
+    soundEffect.play();
 
     if (scoreCount === overallCoinCount) {
       levelUp();
