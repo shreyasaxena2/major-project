@@ -85,6 +85,7 @@ function setup() {
 
 }
 
+
 function draw() {
   if (!gameStarted) {
     startScreen();
