@@ -36,6 +36,7 @@ let playerImg;
 let coinImg;
 let obsImg;
 let soundEffect;
+let highScore;
 
 // game states
 let gameOver = false;
@@ -77,6 +78,11 @@ function setup() {
 
   randomize();
   // calculateCoinCount();
+
+  console.log("setup");
+  // localStorage.setItem("highScore", 0);
+  // highScore = 0;
+
 }
 
 function draw() {
