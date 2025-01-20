@@ -37,12 +37,14 @@ let coinImg;
 let obsImg;
 let soundEffect;
 let highScore;
+let exitImg;
 
 // game states
 let gameOver = false;
 let gameWon = false;
 let gameStarted = false;
 let level = 1;
+let gameExit = false;
 
 let hardCodedGrid = [
   [1, 0, 1], 
@@ -65,6 +67,7 @@ function preload() {
   coinImg = loadImage("coinImg.png");
   obsImg = loadImage("obsImg.jpg");
   soundEffect = loadSound("coin-sound.mp3");
+  exitImg = loadImage("exitImg.jpg");
 }
 
 
@@ -96,6 +99,10 @@ function draw() {
   
   else if (gameWon) {
     gameWonScreen();
+  }
+  else if (gameExit) {
+    exitGame();
+    exitScreen();
   }
 
   else {
@@ -180,6 +187,13 @@ function displayHighScore() {
   console.log(' display high score from cache ', localStorage.getItem("highScore"));
   let highScore = localStorage.getItem("highScore") || 0;
   text("High Score: " + highScore, 10, 10);
+}
+
+function exitScreen() {
+  image(exitImg, 0, 0, windowWidth, windowHeight);
+  fill(255);
+  textSize(24);
+  text("Thank You For Playing!", width / 2, height / 2);
 }
 
 
@@ -344,8 +358,21 @@ function resetGame() {
 }
 
 
+function exitGame() {
+  localStorage.removeItem("highScore");
+}
+
+
+
 
 function keyPressed() {
+
+  if ((key === "e" || key === "E") && (gameOver || gameWon)) {
+    gameExit = true;
+    return;
+  }
+
+
   if (keyIsDown(SHIFT)) {
     if (keyCode === UP_ARROW && playerY - 2 * cellHeight >= 0) {
       // console.log('double up arrow');
@@ -382,4 +409,8 @@ function keyPressed() {
       playerY += cellHeight;
     }
   }
+
+
+
 }
+
