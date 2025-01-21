@@ -1,3 +1,4 @@
+
 // Project Title
 // Your Name
 // Date
@@ -11,6 +12,7 @@
 
 
 
+// global variables for the grid
 let cols = 3;
 let rows = 6;
 let cellWidth;
@@ -19,34 +21,16 @@ let playerX;
 let playerY;
 let obstacle;
 let stopDistance = 50;
+
+
+
+// global variables for the high score, score and time left
 let initialCoinCount = 0;
 let scoreCount = 0;
 let timeLeft;
 let startTime = 0;
 let overallCoinCount = 0;
-let startScImg;
-let rulesImg;
-let titleFont;
-let gameOverImg;
-let gameOverFont;
-let gameWonImg;
-let playerImg1;
-let coinImg;
-let obsImg;
-let soundEffect;
 let highScore;
-let exitImg;
-let playerShape;
-let playerImg2;
-let playerImg3;
-
-// game states
-let gameOver = false;
-let gameWon = false;
-let gameStarted = false;
-let level = 1;
-let gameExit = false;
-
 let hardCodedGrid = [
   [1, 0, 1], 
   [0, 2, 0],
@@ -57,6 +41,35 @@ let hardCodedGrid = [
 ];
 
 
+// global variables for images, fonts and sounds
+let startScImg;
+let rulesImg;
+let titleFont;
+let gameOverImg;
+let gameOverFont;
+let gameWonImg;
+let playerImg1;
+let coinImg;
+let obsImg;
+let soundEffect;
+let exitImg;
+let playerShape;
+let playerImg2;
+let playerImg3;
+
+
+
+// game states
+let gameOver = false;
+let gameWon = false;
+let gameStarted = false;
+let level = 1;
+let gameExit = false;
+
+
+
+
+// loads all images, fonts and sounds
 function preload() {
   startScImg = loadImage("startsc.gif");
   rulesImg = loadImage("rules.png");
@@ -75,6 +88,7 @@ function preload() {
 
 
 
+// creates the canvas and cell dimensions
 function setup() {
   createCanvas(windowWidth, windowHeight);
   cellWidth = width / cols;
@@ -86,15 +100,11 @@ function setup() {
 
   playerImg1 = loadImage("player-Img.png");
   playerShape = playerImg1;
-  // calculateCoinCount();
-
-  console.log("setup");
-  // localStorage.setItem("highScore", 0);
-  // highScore = 0;
 
 }
 
 
+// resizes the window
 function windowResized() {
   createCanvas(windowWidth, windowHeight);
   cellWidth = width / cols;
@@ -106,15 +116,12 @@ function windowResized() {
 
   playerImg1 = loadImage("player-Img.png");
   playerShape = playerImg1;
-  // calculateCoinCount();
-
-  console.log("setup");
-  // localStorage.setItem("highScore", 0);
-  // highScore = 0;
 }
 
-function draw() {
 
+
+// where all the main functions are called
+function draw() {
   if (gameExit) {
     exitGame();
     exitScreen();
@@ -124,6 +131,7 @@ function draw() {
   if (!gameStarted) {
     startScreen();
   }
+
   else if (gameOver) {
     gameOverScreen();
   }
@@ -142,11 +150,11 @@ function draw() {
     displayHighScore();
     displayTimer();
   }
-  
 }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 
 
 
+// if the mouse is pressed...
 function mousePressed() {
   if (!gameStarted && !gameOver) {
     gameStarted = true;
@@ -156,9 +164,9 @@ function mousePressed() {
 
 
 
+// creates the start screen
 function startScreen() {
   image(startScImg, 0, 0, windowWidth, windowHeight);
-
   textAlign(CENTER);
   fill(50);
   textSize(28);
@@ -169,13 +177,16 @@ function startScreen() {
   text("Click anywhere to start.", width / 2, 130);
   text("Use the Left, Right, Up and Down arrow to naviagte.", width / 2,  170);
   text("Shift and Arrows to jump.", width / 2, 210);
-  text("3 Levels. Complete within the time limit", width / 2, 250);
+  text("Use the SPACE bar to change between the 3 player icons while playing.", width / 2, 250);
+  text("3 Levels. Complete within the time limit", width / 2, 290);
+  text("Once done playing press E (capitalized or not) to exit the game", width / 2, 330);
 }
 
 
+
+// creates the screen when the player loses
 function gameOverScreen() {
   image(gameOverImg, 0, 0, windowWidth, windowHeight);
-  // background("red");
   textAlign(CENTER);
   textFont(gameOverFont);
   fill(255);
@@ -187,11 +198,9 @@ function gameOverScreen() {
 }
 
 
-
-
+// creates the screen when the player beats the game
 function gameWonScreen() {
   image(gameWonImg, 0, 0, windowWidth, windowHeight);
-  // background("blue");
   textAlign(CENTER);
   fill(255);
   textSize(24);
@@ -201,6 +210,8 @@ function gameWonScreen() {
   text("Refresh Screen to play again.", width / 2, height / 2 + 20);
 }
 
+
+// displays the score for the current game on the top right
 function displayScore() {
   fill(255);
   textSize(20);
@@ -209,15 +220,17 @@ function displayScore() {
 }
 
 
+// displays the high score on the top left
 function displayHighScore() {
   fill(255);
   textSize(20);
   textAlign(LEFT, TOP);
-  // console.log(' display high score from cache ', localStorage.getItem("highScore"));
   let highScore = localStorage.getItem("highScore") || 0;
   text("High Score: " + highScore, 10, 10);
 }
 
+
+// shows up once the player is done playing as many games as they want
 function exitScreen() {
   image(exitImg, 0, 0, windowWidth, windowHeight);
   fill(255);
@@ -226,35 +239,32 @@ function exitScreen() {
 }
 
 
+// shows the timer in the top middle
 function displayTimer() {
   fill(255);
   textSize(20);
   textAlign(CENTER, TOP);
-  //console.log(' time limit is ', timeLimit());
-  // console.log(' time milis is ', millis());
   timeRemaining = max(0, floor((timeLimit() - millis())/1000));
   text("Time Remaining: " + timeRemaining + "s", width / 2, 10);
-  //text("Time Remaining: " + timeRemaining, width / 2, 10);
-  //console.log(' time remaining ', timeRemaining);
   if (timeRemaining === 0 && scoreCount === overallCoinCount) {
-    //gameOver = true;
-    levelUp();
+    levelUp(); // collected all the coins so moves up a level
   }
   else if (timeRemaining === 0 && scoreCount < overallCoinCount) {
-    gameOver = true;
+    gameOver = true; // ran out of time
   }
 }
 
 
+// sets the time limit
 function timeLimit() {
   let baseTime = 45 * 1000;
-  //console.log('vele ', level);
   let levelReduction = (level - 1) * 15 * 1000;
   return startTime + baseTime - levelReduction;
 }
 
 
 
+// draws the grid
 function drawGrid() {
   for (let x = 0; x < cols; x++) {
     for (let y = 0; y < rows; y++) {
@@ -267,6 +277,7 @@ function drawGrid() {
 }
 
 
+// randomly places the coins and obtacles
 function randomize() {
   initialCoinCount = 0;
   for (let i = 0; i < 3; i++) {
@@ -285,60 +296,51 @@ function randomize() {
       else {
         hardCodedGrid[j][i] = x;
       }
-      //console.log(hardCodedGrid[j][i]);
       if (hardCodedGrid[j][i] === 1) {
         initialCoinCount++;
       }
     }
 
   }
-  overallCoinCount = overallCoinCount + initialCoinCount;
+  overallCoinCount = overallCoinCount + initialCoinCount; // keeps a count of coins present for checking with scoreCount
 
   if (hardCodedGrid[5][1] === 1) {
     initialCoinCount -= 1;
-    overallCoinCount -= 1;
+    overallCoinCount -= 1; // if the coin appears on the player where the player always begiins, don't count it
   }
-  hardCodedGrid[5][1] = 0;
+  hardCodedGrid[5][1] = 0; // makes sure there is no coin or obstacle where the player always starts
 
 
 }
 
 
 
-
+// displays the player
 function displayPlayer() {
-  // fill("red");
-  // noStroke();
-  // circle(playerX + cellWidth / 2, playerY + cellHeight / 2, cellWidth * 0.2);
-
-  console.log("Player shape:", playerShape);
   if (playerShape === playerImg1) {
-    // fill("red");
-    // noStroke();
-    // ellipse(playerX + cellWidth / 2, playerY + cellHeight / 2, cellWidth * 0.6);
-    image(playerImg1, playerX + cellWidth/ 2.25, playerY + cellHeight / 4, cellWidth/8, cellHeight/2);
+    image(playerImg1, playerX + cellWidth/ 2.25, playerY + cellHeight / 4, cellWidth/8, cellHeight/2); // player option 1
   }
   else if (playerShape === playerImg2) {
-    image(playerImg2, playerX + cellWidth/ 2.5, playerY + cellHeight / 10, cellWidth/4, cellHeight);
+    image(playerImg2, playerX + cellWidth/ 2.5, playerY + cellHeight / 10, cellWidth/4, cellHeight); // player option 2
   }
   else if (playerShape === playerImg3) {
-    image(playerImg3, playerX + cellWidth/ 2.5, playerY + cellHeight / 10, cellWidth/4, cellHeight);
+    image(playerImg3, playerX + cellWidth/ 2.5, playerY + cellHeight / 10, cellWidth/4, cellHeight); // player option 3
   }
   
 }
 
 
 
+// displays the coins and obstacles in the places decided by the randomize() function
 function displayCoinsandObstacles() {
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
       let cellValue = hardCodedGrid[y][x];
-      if (cellValue === 1) {
-        // fill("blue");
+      if (cellValue === 1) { // coin placed
         noStroke();
         image(coinImg, x * cellWidth + cellWidth / 2 - 75, y * cellHeight + cellHeight / 2 - 25, cellWidth * 0.2, cellHeight * 0.5);
       }
-      else if (cellValue === 2) {
+      else if (cellValue === 2) { // obstacle placed
         fill("pink");
         noStroke();
         rect(x * cellWidth + cellWidth * 0.25, y * cellHeight + cellHeight * 0.25, cellWidth * 0.5, cellHeight * 0.5);
@@ -348,21 +350,22 @@ function displayCoinsandObstacles() {
 }
 
 
+// checks to see if the player is collecting the coins or running into obstacles
 function collisionCheck() {
   let playerCol = floor(playerX / cellWidth);
   let playerRow = floor(playerY / cellHeight);
   
-  if (hardCodedGrid[playerRow][playerCol] === 1) {
+  if (hardCodedGrid[playerRow][playerCol] === 1) { // where the player is, there is a coin
     
-    hardCodedGrid[playerRow][playerCol] = 0;
-    scoreCount++;
+    hardCodedGrid[playerRow][playerCol] = 0; // collects the coin
+    scoreCount++; // score increases
     soundEffect.play();
 
     if (scoreCount === overallCoinCount) {
-      levelUp();
+      levelUp(); // if all coins are collected the player levels up
     }
   }
-  else if (hardCodedGrid[playerRow][playerCol] === 2) {
+  else if (hardCodedGrid[playerRow][playerCol] === 2) { // player position = obstacle position
     // game over as result of loss
     gameOver = true;
     resetGame();
@@ -370,29 +373,31 @@ function collisionCheck() {
 }
 
 
+// keeps a count of time
 function startLevel() {
   startTime = millis();
 }
 
 
+
+// checks when to level up and what happens then
 function levelUp() {
-  if (level === 3) {
+  if (level === 3) { // last level completed
     gameWon = true;
     resetGame();
     return;
   }
-  level++;
+  level++; // level increases
   playerX = cellWidth;
   playerY = height - cellHeight;
-  randomize();
-  //calculateCoinCount();
+  randomize(); // grid randomizes
+
   startLevel();
 }
 
 
-
+// each time the game ends, it helps decide the high score
 function resetGame() {
-  //console.log('game reset called');
   let highScore = localStorage.getItem("highScore") || 0;
   if (scoreCount > highScore) {
     localStorage.setItem("highScore", scoreCount);
@@ -429,37 +434,29 @@ function keyPressed() {
 
   if (keyIsDown(SHIFT)) {
     if (keyCode === UP_ARROW && playerY - 2 * cellHeight >= 0) {
-      // console.log('double up arrow');
       playerY -= 2 * cellHeight;
     } 
     else if (keyCode === DOWN_ARROW && playerY + 2 * cellHeight < height) {
-      // console.log('double down arrow');
       playerY += 2 * cellHeight;
     } 
     else if (keyCode === LEFT_ARROW && playerX - 2 * cellWidth >= 0) {
-      // console.log('double left arrow');
       playerX -= 2 * cellWidth;
     } 
     else if (keyCode === RIGHT_ARROW && playerX + 2 * cellWidth < width) {
-      // console.log('double right arrow');
       playerX += 2 * cellWidth;
     }
   } 
   else {
     if (keyCode === LEFT_ARROW && playerX - cellWidth >= 0) {
-      // console.log('left arrow');
       playerX -= cellWidth;
     } 
     else if (keyCode === RIGHT_ARROW && playerX + cellWidth < width) {
-      // console.log('right arrow');
       playerX += cellWidth;
     } 
     else if (keyCode === UP_ARROW && playerY - cellHeight >= 0) {
-      // console.log('up arrow');
       playerY -= cellHeight;
     } 
     else if (keyCode === DOWN_ARROW && playerY + cellHeight < height) {
-      // console.log('down arrow');
       playerY += cellHeight;
     }
   }
