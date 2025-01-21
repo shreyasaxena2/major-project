@@ -17,8 +17,6 @@ let cellWidth;
 let cellHeight;
 let playerX;
 let playerY;
-let coins = [];
-let obsArray = [];
 let obstacle;
 let stopDistance = 50;
 let initialCoinCount = 0;
@@ -32,12 +30,15 @@ let titleFont;
 let gameOverImg;
 let gameOverFont;
 let gameWonImg;
-let playerImg;
+let playerImg1;
 let coinImg;
 let obsImg;
 let soundEffect;
 let highScore;
 let exitImg;
+let playerShape;
+let playerImg2;
+let playerImg3;
 
 // game states
 let gameOver = false;
@@ -63,11 +64,13 @@ function preload() {
   gameOverImg = loadImage("gameoverImg.jpg");
   gameOverFont = loadFont("gameOverfont.ttf");
   gameWonImg = loadImage("gamewonscreen.gif");
-  playerImg = loadImage("player-Img.png");
+  playerImg1 = loadImage("player-Img.png");
   coinImg = loadImage("coinImg.png");
   obsImg = loadImage("obsImg.jpg");
   soundEffect = loadSound("coin-sound.mp3");
   exitImg = loadImage("exitImg.jpg");
+  playerImg2 = loadImage("playerImg2.png");
+  playerImg3 = loadImage("playerImg3.png");
 }
 
 
@@ -80,6 +83,9 @@ function setup() {
   playerY = height - cellHeight;
 
   randomize();
+
+  playerImg1 = loadImage("player-Img.png");
+  playerShape = playerImg1;
   // calculateCoinCount();
 
   console.log("setup");
@@ -88,6 +94,24 @@ function setup() {
 
 }
 
+
+function windowResized() {
+  createCanvas(windowWidth, windowHeight);
+  cellWidth = width / cols;
+  cellHeight = height / rows;
+  playerX = cellWidth;
+  playerY = height - cellHeight;
+
+  randomize();
+
+  playerImg1 = loadImage("player-Img.png");
+  playerShape = playerImg1;
+  // calculateCoinCount();
+
+  console.log("setup");
+  // localStorage.setItem("highScore", 0);
+  // highScore = 0;
+}
 
 function draw() {
 
@@ -189,7 +213,7 @@ function displayHighScore() {
   fill(255);
   textSize(20);
   textAlign(LEFT, TOP);
-  console.log(' display high score from cache ', localStorage.getItem("highScore"));
+  // console.log(' display high score from cache ', localStorage.getItem("highScore"));
   let highScore = localStorage.getItem("highScore") || 0;
   text("High Score: " + highScore, 10, 10);
 }
@@ -287,7 +311,20 @@ function displayPlayer() {
   // noStroke();
   // circle(playerX + cellWidth / 2, playerY + cellHeight / 2, cellWidth * 0.2);
 
-  image(playerImg, playerX + cellWidth/ 2.25, playerY + cellHeight / 4, cellWidth/8, cellHeight/2);
+  console.log("Player shape:", playerShape);
+  if (playerShape === playerImg1) {
+    // fill("red");
+    // noStroke();
+    // ellipse(playerX + cellWidth / 2, playerY + cellHeight / 2, cellWidth * 0.6);
+    image(playerImg1, playerX + cellWidth/ 2.25, playerY + cellHeight / 4, cellWidth/8, cellHeight/2);
+  }
+  else if (playerShape === playerImg2) {
+    image(playerImg2, playerX + cellWidth/ 2.5, playerY + cellHeight / 10, cellWidth/4, cellHeight);
+  }
+  else if (playerShape === playerImg3) {
+    image(playerImg3, playerX + cellWidth/ 2.5, playerY + cellHeight / 10, cellWidth/4, cellHeight);
+  }
+  
 }
 
 
@@ -299,7 +336,7 @@ function displayCoinsandObstacles() {
       if (cellValue === 1) {
         // fill("blue");
         noStroke();
-        image(coinImg, x * cellWidth + cellWidth / 2 - 75, y * cellHeight + cellHeight / 2, cellWidth * 0.2, cellHeight * 0.5);
+        image(coinImg, x * cellWidth + cellWidth / 2 - 75, y * cellHeight + cellHeight / 2 - 25, cellWidth * 0.2, cellHeight * 0.5);
       }
       else if (cellValue === 2) {
         fill("pink");
@@ -375,6 +412,18 @@ function keyPressed() {
   if ((key === "e" || key === "E") && (gameOver || gameWon)) {
     gameExit = true;
     return;
+  }
+
+  if (key === " ") {
+    if (playerShape === playerImg1) {
+      playerShape = playerImg2;
+    }
+    else if (playerShape === playerImg2) {
+      playerShape = playerImg3;
+    }
+    else if (playerShape === playerImg3) {
+      playerShape = playerImg1;
+    }
   }
 
 
