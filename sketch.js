@@ -90,6 +90,13 @@ function setup() {
 
 
 function draw() {
+
+  if (gameExit) {
+    exitGame();
+    exitScreen();
+    return;
+  }
+
   if (!gameStarted) {
     startScreen();
   }
@@ -100,10 +107,7 @@ function draw() {
   else if (gameWon) {
     gameWonScreen();
   }
-  else if (gameExit) {
-    exitGame();
-    exitScreen();
-  }
+ 
 
   else {
     drawGrid();
@@ -368,10 +372,10 @@ function exitGame() {
 
 function keyPressed() {
 
-  // if ((key === "e" || key === "E") && (gameOver || gameWon)) {
-  //   gameExit = true;
-  //   return;
-  // }
+  if ((key === "e" || key === "E") && (gameOver || gameWon)) {
+    gameExit = true;
+    return;
+  }
 
 
   if (keyIsDown(SHIFT)) {
