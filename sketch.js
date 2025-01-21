@@ -1,14 +1,7 @@
+// Life and Raid
+// Shreya Saxena
+// January 21, 2025
 
-// Project Title
-// Your Name
-// Date
-//
-// Extra for Experts:
-// - describe what you did to take this project "above and beyond"
-
-
-// https://www.dafont.com/ethnocentric.font (TITLE FONT)
-// https://www.dafont.com/game-of-squids.font (GAME OVER FONT)
 
 
 
@@ -20,7 +13,6 @@ let cellHeight;
 let playerX;
 let playerY;
 let obstacle;
-let stopDistance = 50;
 
 
 
@@ -71,19 +63,27 @@ let gameExit = false;
 
 // loads all images, fonts and sounds
 function preload() {
+
+  // loads images
   startScImg = loadImage("startsc.gif");
   rulesImg = loadImage("rules.png");
-  titleFont = loadFont("titleFont.otf");
-  gameOverImg = loadImage("gameoverImg.jpg");
-  gameOverFont = loadFont("gameOverfont.ttf");
-  gameWonImg = loadImage("gamewonscreen.gif");
   playerImg1 = loadImage("player-Img.png");
-  coinImg = loadImage("coinImg.png");
-  obsImg = loadImage("obsImg.jpg");
-  soundEffect = loadSound("coin-sound.mp3");
+  gameOverImg = loadImage("gameoverImg.jpg");
+  gameWonImg = loadImage("gamewonscreen.gif");
   exitImg = loadImage("exitImg.jpg");
   playerImg2 = loadImage("playerImg2.png");
   playerImg3 = loadImage("playerImg3.png");
+  coinImg = loadImage("coinImg.png");
+  obsImg = loadImage("obsImg.jpg");
+
+
+  // loads sound
+  soundEffect = loadSound("coin-sound.mp3");
+
+
+  // loads fonts
+  gameOverFont = loadFont("gameOverfont.ttf");
+  titleFont = loadFont("titleFont.otf");
 }
 
 
@@ -96,8 +96,10 @@ function setup() {
   playerX = cellWidth;
   playerY = height - cellHeight;
 
+  // randomizes placement on grid
   randomize();
 
+  // forces first default player image
   playerImg1 = loadImage("player-Img.png");
   playerShape = playerImg1;
 
@@ -122,25 +124,31 @@ function windowResized() {
 
 // where all the main functions are called
 function draw() {
+
+  // if you want to end the game
   if (gameExit) {
     exitGame();
     exitScreen();
     return;
   }
 
+  // if the game is been played
   if (!gameStarted) {
     startScreen();
   }
 
+  // if lost
   else if (gameOver) {
     gameOverScreen();
   }
   
+  // if won
   else if (gameWon) {
     gameWonScreen();
   }
  
 
+  // generates the player view and tools to play
   else {
     drawGrid();
     displayPlayer();
@@ -284,17 +292,17 @@ function randomize() {
     let obsSet = false;
     for (let j = 0; j < 6; j++) {
       let x = floor(random(0, 3));
-      if (x === 2) {
-        if (obsSet === false) {
+      if (x === 2) { // value for obstacle
+        if (obsSet === false) { // if not obstacle set...
           obsSet = true;
-          hardCodedGrid[j][i] = x;
+          hardCodedGrid[j][i] = x; // set obstacle
         }
         else {
-          hardCodedGrid[j][i] = floor(random(0, 2));
+          hardCodedGrid[j][i] = floor(random(0, 2)); // obstacle has been set there already, randomize again
         }  
       }
       else {
-        hardCodedGrid[j][i] = x;
+        hardCodedGrid[j][i] = x; // set for coin
       }
       if (hardCodedGrid[j][i] === 1) {
         initialCoinCount++;
@@ -398,27 +406,29 @@ function levelUp() {
 
 // each time the game ends, it helps decide the high score
 function resetGame() {
-  let highScore = localStorage.getItem("highScore") || 0;
+  let highScore = localStorage.getItem("highScore") || 0; // is there a value set? if so, get it
   if (scoreCount > highScore) {
-    localStorage.setItem("highScore", scoreCount);
+    localStorage.setItem("highScore", scoreCount); // if scoreCount > highScore, set scorecount is high score
   }
 }
 
 
+// removesvariable highScore from memory
 function exitGame() {
   localStorage.removeItem("highScore");
 }
 
 
 
-
+// if any key is pressed...
 function keyPressed() {
-
+// if this key pressed, exit the game
   if ((key === "e" || key === "E") && (gameOver || gameWon)) {
     gameExit = true;
     return;
   }
 
+  // if key pressed change player icon
   if (key === " ") {
     if (playerShape === playerImg1) {
       playerShape = playerImg2;
@@ -431,36 +441,35 @@ function keyPressed() {
     }
   }
 
-
+  // to jump a cell...
   if (keyIsDown(SHIFT)) {
     if (keyCode === UP_ARROW && playerY - 2 * cellHeight >= 0) {
-      playerY -= 2 * cellHeight;
+      playerY -= 2 * cellHeight; // jumps over down a cell
     } 
     else if (keyCode === DOWN_ARROW && playerY + 2 * cellHeight < height) {
-      playerY += 2 * cellHeight;
+      playerY += 2 * cellHeight; // jumps pver up a cell
     } 
     else if (keyCode === LEFT_ARROW && playerX - 2 * cellWidth >= 0) {
-      playerX -= 2 * cellWidth;
+      playerX -= 2 * cellWidth; // jumps over a cell to the left
     } 
     else if (keyCode === RIGHT_ARROW && playerX + 2 * cellWidth < width) {
-      playerX += 2 * cellWidth;
+      playerX += 2 * cellWidth; // jumps over a cell to the right
     }
   } 
+
+  // to just move from cell to cell consecutively
   else {
     if (keyCode === LEFT_ARROW && playerX - cellWidth >= 0) {
-      playerX -= cellWidth;
+      playerX -= cellWidth; // moves to the left
     } 
     else if (keyCode === RIGHT_ARROW && playerX + cellWidth < width) {
-      playerX += cellWidth;
+      playerX += cellWidth; // moves to the right
     } 
     else if (keyCode === UP_ARROW && playerY - cellHeight >= 0) {
-      playerY -= cellHeight;
+      playerY -= cellHeight; // moves down
     } 
     else if (keyCode === DOWN_ARROW && playerY + cellHeight < height) {
-      playerY += cellHeight;
+      playerY += cellHeight; // moves up
     }
   }
-
-
-
 }
