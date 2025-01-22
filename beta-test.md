@@ -11,8 +11,8 @@
 
 # A non - programmers feedback
 
-- More than one player
-- Being able to pause and resume the game
-- Keep track of high score
-- Boosts/Upgrades
-- Word of the day to collect
+- I liked the concept a lot overall, it was clear and simple, while still being engaging and fun
+- The little icon that moved was a super cute design!
+- The directions were straightforward, and I was able to execute all the moves easily; I found that it moved very smoothly
+- I liked that there were different levels as opposed to staying on the same screen constantly, it made the game more fun
+- One piece of feedback would be to have an indication that the game is about to end if possible, as it was a little abrupt

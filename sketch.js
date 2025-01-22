@@ -74,7 +74,7 @@ function preload() {
   playerImg2 = loadImage("playerImg2.png");
   playerImg3 = loadImage("playerImg3.png");
   coinImg = loadImage("coinImg.png");
-  obsImg = loadImage("obsImg.jpg");
+  // obsImg = loadImage("obsImg.jpg");
 
 
   // loads sound
